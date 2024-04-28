@@ -55,9 +55,9 @@ def searchYoutube(query):
         query = query.replace("youtube","")
         query = query.replace("jarvis","")
         web  = "https://www.youtube.com/results?search_query=" + query
-        webbrowser.open(web)
-        pywhatkit.playonyt(query)
-        speak("Done, Sir")
+        webbrowser.open(web)  # Open the YouTube search directly in the default web browser
+        pywhatkit.playonyt(query)  # Play the first video from the search results
+        speak("Done, Sir")
 
 def searchWikipedia(query):
     if "wikipedia" in query:

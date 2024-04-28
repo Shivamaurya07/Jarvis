@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 from plyer import notification
 from pygame import mixer
 import speedtest
+from Translator import translate_text
+
 
 ### --- Password Protection --- ###
 
@@ -155,11 +157,10 @@ if __name__ == "__main__":
 
 ### --- Google Translator In Jarvis --- ###   [Open a New File and Name it as Translator.py]                    
 
-                elif "translate" in query:
-                    from Translator import translategl
-                    query = query.replace("jarvis","")
-                    query = query.replace("translate","")
-                    translategl(query)
+                elif 'translate' in query:
+                    # Extract the text to translate
+                    translate_text()
+
 
 ### --- Open Any App Function --- ### 
 
@@ -318,12 +319,20 @@ if __name__ == "__main__":
 ### --- Temperature --- ###
 
                 elif "temperature" in query:
-                     search = "temperature in maharashtra"
-                     url = f"https://www.google.com/search?q={search}"
-                     r  = requests.get(url)
-                     data = BeautifulSoup(r.text,"html.parser")
-                     temp = data.find("div", class_ = "BNeawe").text
-                     speak(f"current{search} is {temp}")
+                    location = "maharashtra"
+                    search = f"temperature in {location}"
+                    url = f"https://www.google.com/search?q={search}"
+                    r = requests.get(url)
+                    data = BeautifulSoup(r.text, "html.parser")
+                    
+                    # Find the element containing the temperature information
+                    temp_element = data.find("div", class_="BNeawe iBp4i AP7Wnd")
+                    
+                    if temp_element:
+                        temp = temp_element.text
+                        speak(f"Current temperature in {location} is {temp}")
+                    else:
+                        speak(f"Sorry, I couldn't retrieve the temperature for {location}")
                 
                 elif "weather" in query:
                      search = "temperature in maharashtra"
@@ -336,7 +345,8 @@ if __name__ == "__main__":
 ### --- Alarm Part 1 --- ###
 
                 elif "set an alarm" in query:
-                     print("input time example:- 10 and 10 and 10")
+                     print("input time example:- 10:10:10")
+                     print("The format should be Hours:Minutes:Seconds")
                      speak("Set the time")
                      a = input("Please tell the time :- ")
                      alarm(a)
